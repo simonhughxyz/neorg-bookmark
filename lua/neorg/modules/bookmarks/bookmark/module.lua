@@ -16,4 +16,11 @@ module.public = {
   version = "0.0.1",
 }
 
+module.config.pulic = {
+    -- the file name to compile bookmarks too
+    compile_file = "bookmarks.norg",
+    -- excluded files or directories from bookmark parsing
+    exclude = {},
+}
+
 return module
