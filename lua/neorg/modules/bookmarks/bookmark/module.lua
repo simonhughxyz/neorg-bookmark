@@ -12,4 +12,8 @@ module.load = function()
   log.info("BOOKMARK loaded!")
 end
 
+module.public = {
+  version = "0.0.1",
+}
+
 return module
