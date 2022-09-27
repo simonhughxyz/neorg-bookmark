@@ -6,5 +6,10 @@
 require('neorg.modules.base')
 
 local module = neorg.modules.create("bookmarks.bookmark")
+local log = require('neorg.external.log')
+
+module.load = function()
+  log.info("BOOKMARK loaded!")
+end
 
 return module
