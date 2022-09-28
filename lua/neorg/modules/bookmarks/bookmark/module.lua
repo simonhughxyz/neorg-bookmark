@@ -4,12 +4,37 @@
 --]]
 
 require('neorg.modules.base')
+require('neorg.events')
 
 local module = neorg.modules.create("bookmarks.bookmark")
 local log = require('neorg.external.log')
 
+module.setup = function()
+    return {
+        success = true,
+        requires = {
+            "core.keybinds",
+        },
+    }
+end
+
 module.load = function()
   log.info("BOOKMARK loaded!")
+
+    -- Register keybinds
+    module.required["core.keybinds"].register_keybinds(module.name, { "compile", "views", "edit", "capture" })
+end
+
+module.on_event = function(event)
+    if event.split_type[2] == "bookmark.bookmarks.compile" then
+        vim.schedule(function() module.public.compile() end)
+    elseif event.split_type[2] == "bookmark.bookmarks.views" then
+        vim.schedule(function() module.public.views() end)
+    elseif event.split_type[2] == "bookmark.bookmarks.edit" then
+        vim.schedule(function() module.public.edit() end)
+    elseif event.split_type[2] == "bookmark.bookmarks.capture" then
+        vim.schedule(function() module.public.capture() end)
+    end
 end
 
 module.public = {
@@ -34,6 +59,15 @@ module.config.pulic = {
     compile_file = "bookmarks.norg",
     -- excluded files or directories from bookmark parsing
     exclude = {},
+}
+
+module.events.subscribed = {
+    ["core.keybinds"] = {
+        ["bookmarks.bookmark.compile"] = true,
+        ["bookmarks.bookmark.capture"] = true,
+        ["bookmarks.bookmark.views"] = true,
+        ["bookmarks.bookmark.edit"] = true,
+    },
 }
 
 return module
