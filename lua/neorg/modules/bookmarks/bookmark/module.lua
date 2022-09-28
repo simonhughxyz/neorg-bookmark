@@ -26,13 +26,13 @@ module.load = function()
 end
 
 module.on_event = function(event)
-    if event.split_type[2] == "bookmark.bookmarks.compile" then
+    if event.split_type[2] == "bookmarks.bookmark.compile" then
         vim.schedule(function() module.public.compile() end)
-    elseif event.split_type[2] == "bookmark.bookmarks.views" then
+    elseif event.split_type[2] == "bookmarks.bookmark.views" then
         vim.schedule(function() module.public.views() end)
-    elseif event.split_type[2] == "bookmark.bookmarks.edit" then
+    elseif event.split_type[2] == "bookmarks.bookmark.edit" then
         vim.schedule(function() module.public.edit() end)
-    elseif event.split_type[2] == "bookmark.bookmarks.capture" then
+    elseif event.split_type[2] == "bookmarks.bookmark.capture" then
         vim.schedule(function() module.public.capture() end)
     end
 end
