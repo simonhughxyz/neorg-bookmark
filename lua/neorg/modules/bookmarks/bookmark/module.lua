@@ -13,7 +13,20 @@ module.load = function()
 end
 
 module.public = {
-  version = "0.0.1",
+    version = "0.0.1",
+
+    compile = function()
+        print "bookmark compile"
+    end,
+    views = function() 
+        print "bookmark views"
+    end,
+    edit = function()
+        print "bookmark edit"
+    end,
+    capture = function()
+        print "bookmark capture"
+    end,
 }
 
 module.config.pulic = {
