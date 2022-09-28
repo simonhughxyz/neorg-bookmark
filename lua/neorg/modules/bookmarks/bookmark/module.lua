@@ -13,6 +13,7 @@ module.setup = function()
     return {
         success = true,
         requires = {
+            "core.neorgcmd",
             "core.keybinds",
         },
     }
@@ -23,17 +24,32 @@ module.load = function()
 
     -- Register keybinds
     module.required["core.keybinds"].register_keybinds(module.name, { "compile", "views", "edit", "capture" })
+
+    -- Add neorgcmd commands
+    module.required["core.neorgcmd"].add_commands_from_table({
+        bookmark = {
+            args = 1,
+            subcommands = {
+                compile = { args = 0, name = "bookmark.compile" },
+                views = { args = 0, name = "bookmark.views" },
+                edit = { args = 0, name = "bookmark.edit" },
+                capture = { args = 0, name = "bookmark.capture" },
+            },
+        },
+    })
 end
 
 module.on_event = function(event)
-    if event.split_type[2] == "bookmarks.bookmark.compile" then
-        vim.schedule(function() module.public.compile() end)
-    elseif event.split_type[2] == "bookmarks.bookmark.views" then
-        vim.schedule(function() module.public.views() end)
-    elseif event.split_type[2] == "bookmarks.bookmark.edit" then
-        vim.schedule(function() module.public.edit() end)
-    elseif event.split_type[2] == "bookmarks.bookmark.capture" then
-        vim.schedule(function() module.public.capture() end)
+    if vim.tbl_contains({ "core.keybinds", "core.neorgcmd" }, event.split_type[1]) then
+        if vim.tbl_contains({ "bookmark.compile", "bookmarks.bookmark.compile" }, event.split_type[2]) then
+            vim.schedule(function() module.public.compile() end)
+        elseif vim.tbl_contains({ "bookmark.views", "bookmarks.bookmark.views" }, event.split_type[2]) then
+            vim.schedule(function() module.public.views() end)
+        elseif vim.tbl_contains({ "bookmark.edit", "bookmarks.bookmark.edit" }, event.split_type[2]) then
+            vim.schedule(function() module.public.edit() end)
+        elseif vim.tbl_contains({ "bookmark.capture", "bookmarks.bookmark.capture" }, event.split_type[2]) then
+            vim.schedule(function() module.public.capture() end)
+        end
     end
 end
 
@@ -67,6 +83,12 @@ module.events.subscribed = {
         ["bookmarks.bookmark.capture"] = true,
         ["bookmarks.bookmark.views"] = true,
         ["bookmarks.bookmark.edit"] = true,
+    },
+    ["core.neorgcmd"] = {
+        ["bookmark.compile"] = true,
+        ["bookmark.views"] = true,
+        ["bookmark.edit"] = true,
+        ["bookmark.capture"] = true,
     },
 }
 
