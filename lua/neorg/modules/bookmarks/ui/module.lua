@@ -14,15 +14,18 @@ module.setup = function()
         requires = {
             "core.ui",
         },
+        imports = {
+            "capture_popup",
+        },
     }
 end
 
 module.public = {
+    display_messages = function()
+        vim.cmd(string.format([[echom '%s']], "Press ESC to exit without saving"))
+    end,
     edit_bookmark_at_cursor = function()
         print "edit bookmark at cursor"
-    end,
-    show_capture_popup = function()
-        print "show capture popup"
     end,
     show_views_popup = function()
         print "show views popup"
